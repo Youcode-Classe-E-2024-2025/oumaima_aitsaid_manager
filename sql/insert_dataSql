@@ -1,0 +1,53 @@
+-- Insert Data into Roles
+INSERT INTO roles (role_name, id_user) VALUES
+('admin', NULL),
+('chef', NULL),
+('user', NULL);
+
+-- Insert Data into Users
+INSERT INTO users (id_role, is_archifed, is_approved, name, email, password) VALUES
+(1, FALSE, TRUE, 'Admin User', 'admin@example.com', 'adminpassword'), -- Admin
+(2, FALSE, TRUE, 'Chef User', 'chef@example.com', 'chefpassword'), -- Chef
+(3, FALSE, TRUE, 'Customer A', 'customer.a@example.com', 'customerapassword'), -- Customer A
+(3, FALSE, TRUE, 'Customer B', 'customer.b@example.com', 'customerbpassword'); -- Customer B
+
+-- Insert Data into Actions
+INSERT INTO actions (id_user, action) VALUES
+(1, 'Created initial setup'), -- Admin
+(2, 'Added new menu item'), -- Chef
+(3, 'Placed an order'), -- Customer A
+(4, 'Placed an order'); -- Customer B
+
+-- Insert Data into Archived Users
+INSERT INTO archived_users (id_user, name, email) VALUES
+(4, 'Customer B', 'customer.b@example.com');
+
+-- Insert Data into Plat
+INSERT INTO Plat (name, prix) VALUES
+('Grilled Chicken', 15.99),
+('Steak', 20.99),
+('Pasta', 12.99);
+
+-- Insert Data into Salade
+INSERT INTO salade (name, prix) VALUES
+('Caesar Salad', 8.99),
+('Greek Salad', 9.99),
+('Mixed Salad', 7.99);
+
+-- Insert Data into Dessert
+INSERT INTO Dessert (name, prix) VALUES
+('Chocolate Cake', 5.99),
+('Ice Cream', 4.99),
+('Fruit Salad', 3.99);
+
+-- Insert Data into Menu
+INSERT INTO menu (id_plat, id_salade, id_dessert, id_user) VALUES
+(1, 1, 1, 2), -- Chef creates menu with Grilled Chicken, Caesar Salad, and Chocolate Cake
+(2, 2, 2, 2), -- Chef creates menu with Steak, Greek Salad, and Ice Cream
+(3, 3, 3, 2); -- Chef creates menu with Pasta, Mixed Salad, and Fruit Salad
+
+-- Insert Data into Commande
+INSERT INTO commande (id_menu, id_user) VALUES
+(1, 3), -- Customer A orders Menu 1
+(2, 4), -- Customer B orders Menu 2
+(3, 3); -- Customer A orders Menu 3

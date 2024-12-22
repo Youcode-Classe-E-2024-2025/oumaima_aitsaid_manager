@@ -1,0 +1,9 @@
+{
+    "name": "your/project-name",
+    "description": "A description of your project",
+    "require": {
+      "php": "^8.0",
+        "phpmailer/phpmailer": "^6.9",
+        "markrogoyski/math-php": "^2.10"
+    }
+  }

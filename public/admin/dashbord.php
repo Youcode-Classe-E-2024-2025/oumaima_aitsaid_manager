@@ -6,7 +6,12 @@ use MathPHP\Statistics\Descriptive;
 
 session_start(); 
 
-// Fetch users
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== '1') 
+{ 
+   
+    header('Location: ../user/login.php'); 
+    exit();
+}
 $sql = "SELECT * FROM users WHERE is_archifed = 0"; 
 $result = $conn->query($sql);
 

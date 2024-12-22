@@ -1,4 +1,6 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 require '../vendor/autoload.php'; 
 
@@ -17,14 +19,14 @@ if (isset($_GET['id'])) {
         $userEmail = $user['email'];
         $userName = $user['name'];
 
-        // Approve the user in the database
+
         $approveSql = "UPDATE users SET is_approved = 1 WHERE id = ?";
         $approveStmt = $conn->prepare($approveSql);
         $approveStmt->bind_param("i", $userId);
 
         if ($approveStmt->execute()) {
             
-          echo "user approved";
+          
         } else {
             echo "Failed to approve user.";
         }

@@ -67,5 +67,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     </div>
 </div>
 
+<script>
+const editBtn = document.getElementById('editBtn');
+const editForm = document.getElementById('editForm');
+const closeBtn = document.getElementById('closeBtn');
+
+editBtn.addEventListener('click', () => {
+    editForm.classList.remove('translate-x-full');
+});
+
+closeBtn.addEventListener('click', () => {
+    editForm.classList.add('translate-x-full');
+});
+
+document.getElementById('userForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to save these changes?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, save it!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            event.target.submit(); 
+        }
+    });
+});
+</script>
 </body>
 </html>

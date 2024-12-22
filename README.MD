@@ -39,7 +39,7 @@ Utiliser JavaScript pour améliorer l’interactivité et la convivialité de l�
    - Faites un clic droit sur **Laragon**, puis allez dans **Tools** > **Quick Add** et téléchargez **phpMyAdmin** et **MySQL**.
    - Ouvrir **phpMyAdmin** via Laragon :
      - Dans Laragon, cliquez sur le bouton **Database** pour accéder à phpMyAdmin (username = `root` et mode de passe est vide).
-     - La base de données est automatiquement créez ou vous pouvez Créez une base de données `gestion_restaurants` et importez le fichier `script.sql` (disponible dans le dossier `/sql/insert_data.sql`).
+     - La base de données est automatiquement créez ou vous pouvez Créez une base de données `gestion_restaurants` et importez le fichier `script.sql` (disponible dans le dossier `/sql/query.sql`).
 
 
 4. **Installer les dépendances Node.js** :

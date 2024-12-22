@@ -26,7 +26,32 @@ if (isset($_GET['id'])) {
 
         if ($approveStmt->execute()) {
             
-          
+            $mail = new PHPMailer(true);
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; 
+                $mail->SMTPAuth = true;
+                $mail->Username = 'oumaimabellanova@gmail.com'; 
+                $mail->Password = 'ytqz mnhk ecaq lcls'; 
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                
+                $mail->setFrom('oumaimabellanova@gmail.comm', 'restaurant');
+                $mail->addAddress($userEmail, $userName);
+                $mail->isHTML(true);
+                $mail->Subject = 'Your Account Has Been Approved';
+                $mail->Body = "
+                    <p>Dear $userName,</p>
+                    <p>Your account has been approved! You can now log in and enjoy our services.</p>
+                    <p>Thank you!</p>
+                ";
+
+                $mail->send();
+                echo "User approved, and email sent!";
+            } catch (Exception $e) {
+                echo "User approved, but email could not be sent. Error: {$mail->ErrorInfo}";
+            }
         } else {
             echo "Failed to approve user.";
         }

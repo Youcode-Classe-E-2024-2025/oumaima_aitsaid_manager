@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use MathPHP\Statistics\Descriptive;
 
-session_start(); // Start session to store messages
+session_start(); 
 
 // Fetch users
 $sql = "SELECT * FROM users WHERE is_archifed = 0"; 

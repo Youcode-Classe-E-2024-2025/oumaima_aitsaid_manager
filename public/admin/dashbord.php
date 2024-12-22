@@ -1,33 +1,60 @@
 <?php
 include('../../config/database.php');
+require_once __DIR__ . '/../../vendor/autoload.php';
 
+use MathPHP\Statistics\Descriptive;
 
+session_start(); // Start session to store messages
+
+// Fetch users
 $sql = "SELECT * FROM users WHERE is_archifed = 0"; 
 $result = $conn->query($sql);
-if ($_SERVER['REQUEST_METHOD'] == 'POST' ) {
-        $name = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
-            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
     $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_NUMBER_INT);
 
     if ($name && $email && $password && $role) {
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        
-        $stmt = $conn->prepare("INSERT INTO users (name, email, password, id_role) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssi", $name, $email, $hashed_password, $role);
-        
-        if ($stmt->execute()) {
-            $success_message = "User added successfully.";
+        // Check if the email already exists
+        $check_sql = "SELECT id FROM users WHERE email = ?";
+        $check_stmt = $conn->prepare($check_sql);
+        $check_stmt->bind_param("s", $email);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        if ($check_result->num_rows > 0) {
+            $_SESSION['error_message'] = "Email $email is already registered. Please use a different email.";
         } else {
-            $error_message = "Error adding user: " . $stmt->error;
+
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("INSERT INTO users (name, email, password, id_role) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("sssi", $name, $email, $hashed_password, $role);
+
+            if ($stmt->execute()) {
+                $_SESSION['success_message'] = "User added successfully.";
+            } else {
+                $_SESSION['error_message'] = "Error adding user: " . $stmt->error;
+            }
+
+            $stmt->close();
         }
-        
-        $stmt->close();
+
+        $check_stmt->close();
     } else {
-        $error_message = "All fields are required.";
+        $_SESSION['error_message'] = "All fields are required.";
     }
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
 }
+$success_message = $_SESSION['success_message'] ?? null;
+$error_message = $_SESSION['error_message'] ?? null;
+
+unset($_SESSION['success_message'], $_SESSION['error_message']);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -125,12 +152,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' ) {
             });
 
             <?php if (isset($success_message)): ?>
-                Swal.fire('Success!', '<?php echo $success_message; ?>', 'success');
-            <?php endif; ?>
+    Swal.fire('Success!', '<?php echo $success_message; ?>', 'success');
+<?php endif; ?>
 
-            <?php if (isset($error_message)): ?>
-                Swal.fire('Error!', '<?php echo $error_message; ?>', 'error');
-            <?php endif; ?>
+<?php if (isset($error_message)): ?>
+    Swal.fire('Error!', '<?php echo $error_message; ?>', 'error');
+<?php endif; ?>
+
         });
     </script>
 </body>

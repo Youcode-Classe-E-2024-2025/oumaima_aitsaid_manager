@@ -124,7 +124,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' ) {
                 addUserForm.classList.toggle('hidden');
             });
 
-           
+            <?php if (isset($success_message)): ?>
+                Swal.fire('Success!', '<?php echo $success_message; ?>', 'success');
+            <?php endif; ?>
+
+            <?php if (isset($error_message)): ?>
+                Swal.fire('Error!', '<?php echo $error_message; ?>', 'error');
+            <?php endif; ?>
         });
     </script>
 </body>

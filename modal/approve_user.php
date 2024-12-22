@@ -2,9 +2,13 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/autoload.php'; 
 
+
+require '../vendor/autoload.php'; 
 include('../config/database.php');
+
+session_start(); 
+
 if (isset($_GET['id'])) {
     $userId = $_GET['id'];
 
@@ -48,15 +52,37 @@ if (isset($_GET['id'])) {
                 ";
 
                 $mail->send();
-                echo "User approved, and email sent!";
+                $_SESSION['success_message'] = "User approved, and email sent!";
             } catch (Exception $e) {
-                echo "User approved, but email could not be sent. Error: {$mail->ErrorInfo}";
-            }
+                $_SESSION['error_message'] = "User approved, but email could not be sent. Error: {$mail->ErrorInfo}";            }
         } else {
-            echo "Failed to approve user.";
+            $_SESSION['error_message'] = "Failed to approve user.";
         }
     } else {
-        echo "User not found.";
+        $_SESSION['error_message'] = "User not found.";
     }
+    header("Location: ../public/admin/dashbord.php");
+    exit();
 }
+
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Approval</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <script>
+        <?php if ($success_message): ?>
+            Swal.fire('Success!', '<?php echo $success_message; ?>', 'success');
+        <?php endif; ?>
+
+        <?php if ($error_message): ?>
+            Swal.fire('Error!', '<?php echo $error_message; ?>', 'error');
+        <?php endif; ?>
+    </script>
+</body>
+</html>

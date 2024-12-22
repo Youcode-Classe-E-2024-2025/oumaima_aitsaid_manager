@@ -1,4 +1,35 @@
+<?php
+include("../config/database.php"); 
+$user_id = null;
+$user = null;
 
+if (isset($_GET['id'])) {
+    $user_id = $_GET['id'];
+
+    $sql = "SELECT * FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
+    $user_id = $_POST['id'];  
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $role = $_POST['role'];
+    $update_sql = "UPDATE users SET name = ?, email = ?, id_role = ? WHERE id = ?";
+    $update_stmt = $conn->prepare($update_sql);
+    $update_stmt->bind_param("ssii", $name, $email, $role, $user_id);
+    if ($update_stmt->execute()) {
+        header("Location: ../public/admin/dashbord.php");
+        exit(); 
+    } else {
+        echo "Error updating user: " . $update_stmt->error;
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">

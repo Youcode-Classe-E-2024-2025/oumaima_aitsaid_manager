@@ -41,7 +41,7 @@ if (isset($_POST['login'])) {
 
                     switch ($user["id_role"]) {
                         case 1:
-                            header("Location: ../admin/dashboard.php");
+                            header("Location: ../admin/dashbord.php");
                             break;
                         case 2:
                             header("Location: ../chef/dashboard_chef.php");
